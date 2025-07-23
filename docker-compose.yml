@@ -1,0 +1,16 @@
+services:
+  # ... (your n8n and context7 services) ...
+
+  my-nodejs-app:
+    build:
+      context: ./my-nodejs-app-code # Tells Docker to build from this directory
+      dockerfile: Dockerfile        # Optional: points to a custom Dockerfile if you have one
+    image: my-nodejs-app-image:latest # Give your custom image a name
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Maps host port 3000 to container port 3000
+    working_dir: /usr/src/app
+    volumes:
+      - ./my-nodejs-app-code:/usr/src/app # Mounts your local code for development (changes instantly)
+    command: sh -c "npm install && npm start" # <--- CRUCIAL: Installs dependencies, then starts app
+                                           # This ensures 'task-master-ai' is installed INSIDE the container
